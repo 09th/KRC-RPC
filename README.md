@@ -10,7 +10,7 @@ This project is inspired by [KukavarProxy](https://github.com/ImtsSrl/KUKAVARPRO
 * SSL support
 #### Robot
 * Read and write global variables
-* Read and write wariables from the specific .dat file
+* Read and write variables from the specific .dat file
 * Robot interpreter control
 * Submit interpreter control
 
