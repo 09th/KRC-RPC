@@ -1,0 +1,20 @@
+{'method':'listMethods','params':[],'id':1}
+{'method':'auth','params':['My_example_KEY'],'id':1}
+
+{'method':'Var_ShowVar','params':['$TRAFONAME[]'],'id':1}
+{'method':'Var_ShowVarDP','params':['KRC:\\R1\\Program\\test.dat','XP1'],'id':1}
+{'method':'Var_SetVar','params':['$OV_PRO','100'],'id':1}
+
+{'method':'Select_Select','params':['KRC:\\R1\\Program\\test.src'],'id':1}
+{'method':'Select_Run','params':['KRC:\\R1\\Program\\test.src'],'id':1}
+{'method':'Select_Start','params':[],'id':1}
+{'method':'Select_Cancel','params':[],'id':1}
+{'method':'Select_CancelSubmit','params':[2],'id':1}
+
+
+[{'method':'Select_StopSubmit','params':[2],'id':1}, {'method':'Select_CancelSubmit','params':[2],'id':2}]
+{'method':'Select_StartSubmit','params':[2],'id':1}
+{'method':'Select_SelectSubmit','params':['KRC:\\R1\\System\\sps.sub', 2],'id':1}
+
+
+
