@@ -35,7 +35,7 @@ namespace KrcRpc_socket_server
 
     class Program
     {
-        private static object _svc;
+        private static KrcRpcService _svc;
         static void Main(string[] args)
         {
             // must new up an instance of the service so it can be registered to handle requests.
@@ -47,6 +47,8 @@ namespace KrcRpc_socket_server
                     var async = ((JsonRpcStateAsync)state);
                     var result = async.Result;
                     var writer = ((StreamWriter)async.AsyncState);
+                    if (_svc.cfgVerboseLvl > 1)
+                        Console.WriteLine("RESPONSE: {0}", result);
                     writer.WriteLine(result);
                     writer.FlushAsync();
                 });
@@ -73,6 +75,7 @@ namespace KrcRpc_socket_server
         private readonly string[] cfgUnauthMethods;
         private readonly string[] cfgForbiddenMethods;
         private readonly string cfgAuthKey;
+        public readonly int cfgVerboseLvl;
 
         public KrcRpcService(){
             objServiceFactory = new KrcServiceFactoryClass();
@@ -85,6 +88,7 @@ namespace KrcRpc_socket_server
             cfgAuthKey = appconfig["authKey"];
             cfgUnauthMethods = appconfig.GetSection("unauthMethods").Get<string[]>();
             cfgForbiddenMethods = appconfig.GetSection("forbiddenMethods").Get<string[]>();
+            cfgVerboseLvl = appconfig.GetSection("verboseLvl").Get<int>();
             Config.SetPreProcessHandler(new PreProcessHandler(PreProcess));
             Config.SetParseErrorHandler(ParseErrorHandler);
         }
@@ -323,6 +327,7 @@ namespace KrcRpc_socket_server
         private readonly int cfgListenPort;
         private readonly bool cfgSsl;
         private readonly X509Certificate cfgServerCertificate;
+        private readonly int cfgVerboseLvl;
         private TcpListener server;
 
 
@@ -336,6 +341,7 @@ namespace KrcRpc_socket_server
             cfgSsl = false;
             Boolean.TryParse(config["ssl"], out cfgSsl);
             cfgServerCertificate = cfgSsl == true ? X509Certificate.CreateFromCertFile(config["cert"]) : null;
+            cfgVerboseLvl = config.GetSection("verboseLvl").Get<int>();
         }
 
         public void Start(Action<StreamWriter, string, ClientContext> handleRequest)
@@ -352,7 +358,8 @@ namespace KrcRpc_socket_server
             server = new TcpListener(cfgListenAddress, cfgListenPort);
             server.Start();
             //Console.WriteLine(" You can connected with Putty on a (RAW session) to {0} to issue JsonRpc requests.", server.LocalEndpoint);
-            Console.WriteLine("JSON-RPC-to-Cross3 server starts on {0} {1}", server.LocalEndpoint, cfgSsl ? "(SSL)" : "");
+            if (cfgVerboseLvl > 0)
+                Console.WriteLine("JSON-RPC-to-Cross3 server starts on {0} {1}", server.LocalEndpoint, cfgSsl ? "(SSL)" : "");
             while (true)
             {
                 try
@@ -363,7 +370,8 @@ namespace KrcRpc_socket_server
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("RPCServer exception " + e);
+                    if (cfgVerboseLvl > 0)
+                        Console.WriteLine("RPCServer exception " + e);
                 }
             }
         }
@@ -401,7 +409,8 @@ namespace KrcRpc_socket_server
             try 
             {
                 stream = client.GetStream();
-                Console.WriteLine($"Client Connected: {client.Client.RemoteEndPoint}");
+                if (cfgVerboseLvl > 0)
+                    Console.WriteLine($"Client Connected: {client.Client.RemoteEndPoint}");
 
                 if (cfgSsl){
                     sslStream = SslWrapStream(stream);
@@ -418,22 +427,26 @@ namespace KrcRpc_socket_server
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
+                    if (cfgVerboseLvl > 1)
+                        Console.WriteLine("REQUEST: {0}", line);
                     handleRequest(writer, line, context);
-
-                    //Console.WriteLine("REQUEST: {0}", line);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: {0}", e.Message);
-                if (e.InnerException != null)
+                if (cfgVerboseLvl > 0)
                 {
-                    Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
+                    Console.WriteLine("Exception: {0}", e.Message);
+                    if (e.InnerException != null)
+                    {
+                        Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
+                    }
                 }
             }
             finally
             {
-                Console.WriteLine("Client Disconnect: {0}", client.Client.RemoteEndPoint);
+                if (cfgVerboseLvl > 0)
+                    Console.WriteLine("Client Disconnect: {0}", client.Client.RemoteEndPoint);
                 stream.Close();
                 if (cfgSsl) sslStream.Close();
                 client.Close();
