@@ -37,7 +37,7 @@ or
 ```
 {'method':'auth','params':['My_example_KEY'],'id':1}
 ```
-to try authorize on the server. More examples can be found in `examples/command_examples.txt`
+to try authorize on the server. More command examples can be found in `examples/command_examples.txt`
 
 `examples/raw_client.py` - an example of using python as a raw socket client
 
