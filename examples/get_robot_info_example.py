@@ -2,6 +2,9 @@ import socket
 import json
 import re
 
+IP_ADDR = '192.168.121.156'
+PORT = 3333
+
 var_info = {
     "Robot model":"$TRAFONAME[]",
     "System":"$RCV_INFO[]",
@@ -39,7 +42,7 @@ def show_prog_info(client):
             print('\t%s\t[%s]\t(%s)' % (prog['SEL_NAME[]'], prog['P_STATE'], prog['PRO_IP_SNR']))
 
 client = socket.socket()
-client.connect(('192.168.121.156', 3333))
+client.connect((IP_ADDR, PORT))
 
 show_rob_info(client)
 show_prog_info(client)
