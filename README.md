@@ -44,7 +44,7 @@ to try authorize on the server. More command examples can be found in `examples/
 `examples/raw_client.ps1` - same for the windows power shell
 
 #### SSL
-`examples/ssl/ssl_client.py` - using python to connect via SSL and retrieve some data. Also the `examples/ssl` directory contains examples of server and client certificates + appsettings.json with the SSL option enabled.
+`examples/ssl/ssl_client.py` - using python to connect via SSL and retrieve some data. Also the `examples/ssl` directory contains examples of server and shared certificates.
 
 ## Links
 * [KukavarProxy](https://github.com/ImtsSrl/)
