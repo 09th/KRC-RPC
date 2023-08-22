@@ -1,6 +1,6 @@
 ## KRC-RPC
 
-Implementation of the JSON-RPC TCP socket server for the KUKA robot Cross3Krc COM service. Allows to remote acces and control of some robot variables and functions.
+Implementation of JSON-RPC TCP socket server for KUKA robot Cross3Krc COM service. Allows to remote acces and control of some robot variables and functions.
 This project is inspired by [KukavarProxy](https://github.com/ImtsSrl/KUKAVARPROXY)
 
 ## Features (WIP)
