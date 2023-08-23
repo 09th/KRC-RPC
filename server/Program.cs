@@ -16,7 +16,7 @@ using System.Security.Authentication;
 
 namespace KrcRpc_socket_server
 {
-    public struct ClientContext
+    public class ClientContext
     {
         public bool auth;
         public string key ;
@@ -96,7 +96,7 @@ namespace KrcRpc_socket_server
         private JsonRpcException PreProcess(JsonRequest rpc, object context)
         {
             ClientContext clientContext = (ClientContext) context;
-            //Console.WriteLine(cfgForbiddenMethods);
+            //Console.WriteLine(clientContext.auth);
             if (cfgForbiddenMethods is not null)
                 if (cfgForbiddenMethods.Contains(rpc.Method, StringComparer.OrdinalIgnoreCase)){
                     return new JsonRpcException(-3, "This method is forbidden by config.", null);
