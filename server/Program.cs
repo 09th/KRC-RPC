@@ -71,6 +71,7 @@ namespace KrcRpc_socket_server
         private readonly ICKSyncSelect3 itfSyncselect;
         private readonly ICKSyncKcpKey itfSynckcpkey;
         private readonly ICKSyncMotion itfSyncmotion;
+        private readonly ICKSyncFile itfSyncfile;
         private readonly bool cfgAuthRequired;
         private readonly string[] cfgUnauthMethods;
         private readonly string[] cfgForbiddenMethods;
@@ -83,6 +84,7 @@ namespace KrcRpc_socket_server
             itfSyncselect = (ICKSyncSelect3)objServiceFactory.GetService("WBC_KrcLib.SyncSelect", "CrossCom");
             itfSynckcpkey = (ICKSyncKcpKey)objServiceFactory.GetService("WBC_KrcLib.SyncKcpKey", "CrossCom");
             itfSyncmotion = (ICKSyncMotion)objServiceFactory.GetService("WBC_KrcLib.SyncMotion", "CrossCom");
+            itfSyncfile = (ICKSyncFile)objServiceFactory.GetService("WBC_KrcLib.SyncFile", "CrossCom");
             IConfiguration appconfig = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
             cfgAuthRequired = appconfig.GetSection("authRequired").Get<bool>();
             cfgAuthKey = appconfig["authKey"];
@@ -217,6 +219,22 @@ namespace KrcRpc_socket_server
                 return "Error";
             }
         }
+
+        delegate void ActionRef45<T1, T2, T3, T4, T5>(T1 p1, T2 p2, T3 p3, ref T4 p4, ref T5 p5);
+        private string TryCrossComCall<T1, T2, T3, T4, T5>(T1 p1, T2 p2, T3 p3, ref T4 p4, ref T5 p5, ActionRef45<T1, T2, T3, T4, T5> a){
+            try
+            {
+                a(p1, p2, p3, ref p4, ref p5);
+                return "Ok";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("exception " + e);
+                JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
+                return "Error";
+            }
+        }
+
         // -------------- generic try-catch for Cross call [end] -----------------------
 
 
@@ -318,6 +336,24 @@ namespace KrcRpc_socket_server
             return TryCrossComCall<string, string, string>(datFile, varName, val, itfSyncvar.SetVarDP);
         }
         // ------- WBC_KrcLib.SyncVar functions [end] ------------
+        
+        [JsonRpcMethodAttribute]
+        private Dictionary<String, String> File_NameList(string path, int fType, int flags){
+            object pvarNames = null;
+            object pvarInfo = null; 
+            String res = TryCrossComCall<string, int, int, object, object>(path, fType, flags, ref pvarNames, ref pvarInfo, itfSyncfile.NameList);
+            if (res == "Ok"){
+                var names = (String[])pvarNames;
+                var info = (String[])pvarInfo;
+                var files = new Dictionary<String, String>();
+                for (int i = 0; i < names.Length; i++){
+                    files[names[i]] = info[i];
+                }
+                return files;
+            } else {
+                return null;
+            }
+        }
     }
 
 

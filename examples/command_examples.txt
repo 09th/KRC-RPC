@@ -16,5 +16,7 @@
 {'method':'Select_StartSubmit','params':[2],'id':1}
 {'method':'Select_SelectSubmit','params':['KRC:\\R1\\System\\sps.sub', 2],'id':1}
 
+{'method':'File_NameList','params':['KRC:\\R1',511,127],'id':1}
+
 
 
