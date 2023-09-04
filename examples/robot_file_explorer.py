@@ -21,7 +21,7 @@ def request(command, client):
     return json.loads(resp)
 
 # Recursive addition of path parts to the tree
-# f_path is list of names splitted from path like 'My\\path\\to\file.res'.split('\\')
+# f_path is list of names splitted from path like 'My\\path\\to\\file.res'.split('\\')
 def add_to_tree(root, f_path):
     el = f_path[0]
     if len(el) > 0:
@@ -40,10 +40,12 @@ class App(object):
         self.tree.pack(fill=tk.BOTH, expand=tk.YES)
         self.f_data = f_data
         self.f_tree = {}
-        for k, v in self.f_data.items():
-            add_to_tree(self.f_tree, k.split('\\'))
         self.tree.heading('#0', text='Tree')
         self.tree.heading('#props', text='Props')
+
+        # Convert retrived data from robot to the tree
+        for k, v in self.f_data.items():
+            add_to_tree(self.f_tree, k.split('\\'))
 
         # Root nodes
         for k in self.f_tree.keys():
