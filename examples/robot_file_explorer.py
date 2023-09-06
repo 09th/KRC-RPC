@@ -9,7 +9,7 @@ ADDR = '192.168.121.156'
 PORT = 3333
 AUTH_KEY = 'My_example_KEY'
 
-# Clas for request data from robot
+# Class for data exchange with the KRC-RPC service 
 class RPC_Conn():
     def __init__(self, addr, port, a_key):
         self._message = ''
@@ -241,13 +241,13 @@ if __name__ == '__main__':
 
     parser = ArgumentParser()
     parser.add_argument("-a", "--address",default=ADDR, type=str,
-                        help="IP address of KRC-RPC service")
+                        help="IP address of KRC-RPC service (default %s)" % ADDR)
     parser.add_argument("-p", "--port", default=PORT, type=int,
-                        help="TCP port of KRC-RPC service")
+                        help="TCP port of KRC-RPC service (default %s)" % PORT)
     parser.add_argument("-r", "--root", default=ROOT, type=str,
-                        help="Root directory (default KRC:\\R1)")
+                        help="Root directory (default %s)" % ROOT)
     parser.add_argument("-k", "--key", default=AUTH_KEY, type=str,
-                        help="Authentication key")
+                        help="Authentication key (default %s)" % AUTH_KEY)
     
     args = parser.parse_args()
     #print(args)
