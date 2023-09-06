@@ -127,7 +127,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -141,7 +142,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -156,7 +158,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -170,7 +173,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -185,7 +189,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -199,7 +204,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -214,7 +220,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -229,7 +236,8 @@ namespace KrcRpc_socket_server
             }
             catch (Exception e)
             {
-                Console.WriteLine("exception " + e);
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
                 JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
                 return "Error";
             }
@@ -293,13 +301,18 @@ namespace KrcRpc_socket_server
         }
 
         [JsonRpcMethodAttribute]
-        private string Select_Stop(){
-            return TryCrossComCall<EKInterpreter>(EKInterpreter.eInterpreterRobot, itfSyncselect.Stop);
+        private string Select_Stop(short interpreter){
+            return TryCrossComCall<EKInterpreter>((EKInterpreter) interpreter, itfSyncselect.Stop);
         }
 
         [JsonRpcMethodAttribute]
         private string Select_Start(){
             return TryCrossComCall<EKInterpreter>(EKInterpreter.eInterpreterRobot, itfSyncselect.Start);
+        }
+
+        [JsonRpcMethodAttribute]
+        private string Select_Reset(short interpreter){
+            return TryCrossComCall<EKInterpreter>((EKInterpreter) interpreter, itfSyncselect.Reset);
         }
 
         [JsonRpcMethodAttribute]
