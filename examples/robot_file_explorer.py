@@ -90,11 +90,12 @@ class RPC_Conn():
 
 # UI class
 class App(object):
-    def __init__(self, master):
+    def __init__(self, master, args):
         self.master = master
+        self.args = args
 
         self.strStatus=tk.StringVar() 
-        self.label=tk.Label(master, bd=1, relief=tk.SUNKEN, anchor=tk.E,
+        self.label=tk.Label(master, bd=1, relief=tk.SUNKEN, anchor=tk.W,
                            textvariable=self.strStatus,
                            font=('arial',10,'bold'),
                            padx = 5)
@@ -129,9 +130,9 @@ class App(object):
         self.tree.heading('#props', text='Props')
 
         
-        self.RPC = RPC_Conn(ADDR, PORT, AUTH_KEY)
+        self.RPC = RPC_Conn(self.args.address, self.args.port, self.args.key)
         self.f_tree = {}
-        self.RPC.request_and_parse_tree(ROOT, self.f_tree)
+        self.RPC.request_and_parse_tree(self.args.root, self.f_tree)
         for k in self.f_tree.keys():
             self.insert_node('', k, k)
         
@@ -145,7 +146,7 @@ class App(object):
 
     def cmd_select(self):
         for node in self.tree.selection():
-            abspath = ROOT + '\\' + self.nodes[node]
+            abspath = self.args.root + '\\' + self.nodes[node]
             if abspath.endswith(('.dat','.src')):
                 #print(abspath)
                 if abspath.endswith('.dat'):
@@ -177,7 +178,8 @@ class App(object):
 
     def update_status(self):
         self.RPC.message_silent = True
-        self.strStatus.set(self.RPC.request_status())
+        status_str = '%s:\t%s' % (self.args.address, self.RPC.request_status())
+        self.strStatus.set(status_str)
         self.RPC.message_silent = False
         self.master.after(1000, self.update_status)
 
@@ -235,6 +237,21 @@ class App(object):
 
 
 if __name__ == '__main__':
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser()
+    parser.add_argument("-a", "--address",default=ADDR, type=str,
+                        help="IP address of KRC-RPC service")
+    parser.add_argument("-p", "--port", default=PORT, type=int,
+                        help="TCP port of KRC-RPC service")
+    parser.add_argument("-r", "--root", default=ROOT, type=str,
+                        help="Root directory (default KRC:\\R1)")
+    parser.add_argument("-k", "--key", default=AUTH_KEY, type=str,
+                        help="Authentication key")
+    
+    args = parser.parse_args()
+    #print(args)
+
     tk_root = tk.Tk()
-    app = App(tk_root)
+    app = App(tk_root, args)
     tk_root.mainloop()
