@@ -79,14 +79,14 @@ class RPC_Conn():
             print(self.responce)
 
     def request_status(self):
-        vlist = ['$MODE_OP', '$PRO_NAME[]', '$PRO_STATE']
+        vlist = ['$PRO_NAME[]', '$PRO_STATE', '$MODE_OP']
         msglist = []
         for i,v in enumerate(vlist):
             msglist.append({'method':'Var_ShowVar','params':[v],'id':i})
         self.message = json.dumps(msglist)
         #self.responce = self.do_request(self.message, self.client)
         #print(self.responce)
-        return ' '.join([m['result'] for m in self.responce])
+        return [m['result'] for m in self.responce]
 
 # UI class
 class App(object):
@@ -94,12 +94,19 @@ class App(object):
         self.master = master
         self.args = args
 
+        self.statusColors = {
+            '#P_FREE':'#EEEEEE',
+            '#P_ACTIVE':"green",
+            '#P_RESET':"yellow",
+            '#P_STOP':'red',
+            '#P_END':'#777777'
+        }
         self.strStatus=tk.StringVar() 
-        self.label=tk.Label(master, bd=1, relief=tk.SUNKEN, anchor=tk.W,
+        self.lblStatus=tk.Label(master, bd=1, relief=tk.SUNKEN, anchor=tk.W,
                            textvariable=self.strStatus,
                            font=('arial',10,'bold'),
                            padx = 5)
-        self.label.pack(fill=tk.X)  
+        self.lblStatus.pack(fill=tk.X)  
 
         self.create_toolbar(
             {
@@ -141,7 +148,6 @@ class App(object):
 
         self.RPC.on_message_listeners.append(self.on_message)
         self.RPC.on_responce_listeners.append(self.on_responce)
-        #self.strStatus.set(self.RPC.request_status())
         self.update_status()
 
     def cmd_select(self):
@@ -153,32 +159,32 @@ class App(object):
                     abspath = abspath[:-4]+'.src'
                 cmd = {'method':'Select_Select','params':[abspath],'id':1}
                 self.RPC.message = json.dumps(cmd)
-                #self.strStatus.set(self.RPC.request_status())
                 break
     
     def cmd_cancel(self):
         cmd = {'method':'Select_Cancel','params':[],'id':1}
         self.RPC.message = json.dumps(cmd)
-        #self.strStatus.set(self.RPC.request_status())
 
     def cmd_start(self):
         cmd = {'method':'Select_Start','params':[],'id':1}
         self.RPC.message = json.dumps(cmd)
-        #self.strStatus.set(self.RPC.request_status())
 
     def cmd_stop(self):
         cmd = {'method':'Select_Stop','params':[1],'id':1}
         self.RPC.message = json.dumps(cmd)
-        #self.strStatus.set(self.RPC.request_status())
 
     def cmd_reset(self):
         cmd = {'method':'Select_Reset','params':[1],'id':1}
         self.RPC.message = json.dumps(cmd)
-        #self.strStatus.set(self.RPC.request_status())
 
     def update_status(self):
         self.RPC.message_silent = True
-        status_str = '%s:\t%s' % (self.args.address, self.RPC.request_status())
+        status = self.RPC.request_status()
+        for k,v in self.statusColors.items():
+            if k in status:
+                self.lblStatus.config(bg=v)
+                break
+        status_str = '%s:\t%s' % (self.args.address, ' '.join(status))
         self.strStatus.set(status_str)
         self.RPC.message_silent = False
         self.master.after(1000, self.update_status)
