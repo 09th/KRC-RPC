@@ -17,6 +17,8 @@
 {'method':'Select_SelectSubmit','params':['KRC:\\R1\\System\\sps.sub', 2],'id':1}
 
 {'method':'File_NameList','params':['KRC:\\R1',511,127],'id':1}
+{'method':'File_Copy','params':['KRC:\\R1\\Program\\test.src', 'KRC:\\R1\\Program\\test2.src', 64],'id':1}
+{'method':'File_Delete','params':['KRC:\\R1\\Program\\test2.src'],'id':1}
 
 
 

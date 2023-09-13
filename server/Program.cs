@@ -348,7 +348,7 @@ namespace KrcRpc_socket_server
         private string Var_SetVarDP(string datFile, string varName, string val){
             return TryCrossComCall<string, string, string>(datFile, varName, val, itfSyncvar.SetVarDP);
         }
-        // ------- WBC_KrcLib.SyncVar functions [end] ------------
+        // ------- WBC_KrcLib.SyncFile functions [end] ------------
         
         [JsonRpcMethodAttribute]
         private Dictionary<String, String> File_NameList(string path, int fType, int flags){
@@ -367,6 +367,17 @@ namespace KrcRpc_socket_server
                 return null;
             }
         }
+        
+        [JsonRpcMethodAttribute]
+        private string File_Copy(string src, string dest, int flags){
+            return TryCrossComCall<string, string, int>(src, dest, flags, itfSyncfile.Copy);
+        }
+
+        [JsonRpcMethodAttribute]
+        private string File_Delete(string fullName){
+            return TryCrossComCall<string, bool>(fullName, true, itfSyncfile.Delete);
+        }
+
     }
 
 
