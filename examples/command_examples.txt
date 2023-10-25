@@ -19,6 +19,7 @@
 {'method':'File_NameList','params':['KRC:\\R1',511,127],'id':1}
 {'method':'File_Copy','params':['KRC:\\R1\\Program\\test.src', 'KRC:\\R1\\Program\\test2.src', 64],'id':1}
 {'method':'File_Delete','params':['KRC:\\R1\\Program\\test2.src'],'id':1}
-
+{'method':'File_GetFullName','params':['/R1/test2.src'],'id':1}
+{'method':'File_CopyFile2Mem','params':['/R1/test2.src'],'id':1}
 
 
