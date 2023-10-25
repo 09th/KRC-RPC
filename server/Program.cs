@@ -378,6 +378,27 @@ namespace KrcRpc_socket_server
             return TryCrossComCall<string, bool>(fullName, true, itfSyncfile.Delete);
         }
 
+        [JsonRpcMethodAttribute]
+        private string File_GetFullName(string krcName){
+            return TryCrossComCall<string>(krcName, itfSyncfile.GetFullName);
+        }
+
+        [JsonRpcMethodAttribute]
+        private string File_CopyFile2Mem(string fullName){
+            try
+            {
+                object fdat = itfSyncfile.CopyFile2Mem(fullName, 0);
+                return System.Text.Encoding.Default.GetString((System.Byte[])fdat);
+            }
+            catch (Exception e)
+            {
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
+                JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
+                return "Error";
+            }
+        }
+
     }
 
 
