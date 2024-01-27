@@ -399,6 +399,42 @@ namespace KrcRpc_socket_server
             }
         }
 
+        [JsonRpcMethodAttribute]
+        private string File_CopyMem2File(string fdat, string fullName, int nFlags){
+            /*
+        public enum CopyFlags
+        {
+            None = 0,
+            Archive = 1,
+            Modify = 3,
+            Continue = 4,
+            Recursive = 8,
+            Refresh = 16,
+            Update = 48,
+            OverwriteExist = 64,
+            NoDirEntries = 128,
+            JunkDir = 256,
+            ForceBinary = 512,
+            ForceText = 1024,
+            NoVersionCheck = 2048,
+            OverwriteReadonly = 4096,
+            NoKrlAnalysis = 8192
+        }
+            */
+            try
+            {
+                itfSyncfile.CopyMem2File(System.Text.Encoding.Default.GetBytes(fdat), fullName, nFlags);
+                return "Ok";
+            }
+            catch (Exception e)
+            {
+                if (cfgVerboseLvl > 1)
+                    Console.WriteLine("exception " + e);
+                JsonRpcContext.SetException(new JsonRpcException(-27000, e.Message, null));
+                return "Error";
+            }
+        }
+
     }
 
 

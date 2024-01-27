@@ -22,4 +22,8 @@
 {'method':'File_GetFullName','params':['/R1/test2.src'],'id':1}
 {'method':'File_CopyFile2Mem','params':['/R1/test2.src'],'id':1}
 
+# CopyMem2File to the 'KRC:\\...' directory only requres src/dat with the correct contents, otherwise it creats an empty file and returns error
+# If you need an arbitrary file, you can create it in the 'D:\\' and then copy it to the target 'KRC:\\'
+{'method':'File_CopyMem2File','params':['test\ntest', 'D:\\test.txt', 64],'id':1}
+
 
