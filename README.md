@@ -13,6 +13,7 @@ This project is inspired by [KukavarProxy](https://github.com/ImtsSrl/KUKAVARPRO
 * Read and write variables from the specific .dat file
 * Robot interpreter control
 * Submit interpreter control
+* File operations (list, copy, delete, read and write content)
 
 ## Build
 Install NET core SDK 6 or greater. Find PrimaryInterOp.Cross3Krc.dll on the robot controller (e.g. in the C:\KRC\SERVICES\WorkVisualServiceHost) and copy it to the "server" directory of the project. Run build.bat from the "server" directory. 
