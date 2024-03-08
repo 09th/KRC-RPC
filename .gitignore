@@ -4,3 +4,4 @@ packages
 *.dll
 test*
 .nicegui
+.vscode
